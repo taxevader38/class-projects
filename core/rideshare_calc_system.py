@@ -3,7 +3,9 @@ import sys
 import random
 import time
 from core.text import slowprint, color_text 
-from core.calculation import fare_calc, tip
+from core.calculation import fare_calc, tip, receipt
+from map.map import Locations, print_map
+from user.user import User
 
 # =============== Global Variables ===============
 #Flag for while loop
@@ -29,26 +31,16 @@ def loading_bar(duration, steps):
         time.sleep(duration / steps)
     sys.stdout.write("\n")
 
-def receipt(fare, tip_amount=0, total=0):
-    """
-    Print a receipt with the fare, tip, and total cost for the ride
-    """
-
-    #Get the total amount of money from the ride
-    total = fare + tip_amount
-    print("\n----- Receipt -----")
-
-    #Print the fare, tip (if applicable), and total cost of the ride
-    print(f"Fare: ${fare:.2f}")
-    if tip_amount > 0:
-        print(f"Tip: ${tip_amount:.2f}")
-    print(f"Total: ${total:.2f}")
-    print("-------------------")
-
 # =============== Main Program ===============
 #Random duration and step count for variability with the loading bar
 dur = random.randint(1, 5)
 step = random.randint(10, 50)
+
+try:
+    user = User(input("Enter your name:\n > "))
+except (KeyboardInterrupt, EOFError):
+    slowprint("\nNot sure thats something you can say or do, rude", 0.03)
+    sys.exit()
 
 try:
     set_drive = input("Do you want to go for a drive? (y/n)\n > ")
@@ -62,44 +54,64 @@ elif set_drive == "n":
 else:
     slowprint("\nNot sure thats something you can say or do, rude", 0.03)
 
-#While loop to prevent user from hitting enter to not input anything
+world = Locations()
+
 while active_drive:
-    #Prevent users from entering values that are not numeric
+    print_map()
+
+    slowprint(f"\nYou are currently at {user.location.title()}", 0.03)
+
+    connections = world.map[user.location]["connections"]
+
+    slowprint("\nYou can travel to:", 0.03)
+    for place in connections:
+        minutes = world.travel_time_minutes(user.location, place)
+        slowprint(f" - {place.title()} ({minutes} min)", 0.01)
+
     try:
-        km = float(input("\nHow far do you want to travel? (km)\n > "))
-    except (ValueError, KeyboardInterrupt, EOFError):
-        slowprint(color_text("\n- Use an actual distance", "red"), 0.03)
-        continue
-    
-    slowprint("Calculating cost\n", 0.03)
-    
-    loading_bar(dur, step)
-    
-    fare = fare_calc(km)
-    slowprint(color_text(f"\nYour total is: ${fare:.2f}", "green"), 0.03)
-    
-    slowprint("\nWould you like to tip? (y/n)", 0.03)
-    
-    try:
-        choice = input("> ").lower().strip()
+        loc = input("\nWhere do you want to go?\n > ").lower().strip()
     except (KeyboardInterrupt, EOFError):
-        slowprint(color_text("\nIncorrect input, try again", "red"), 0.03)
+        slowprint(color_text("\n- Use an actual location", "red"), 0.03)
         continue
-    
-    if choice not in ['y', 'n']: 
-        slowprint(color_text("\nIncorrect input, restart ride order", "red"), 0.03)
+
+    if loc not in connections:
+        slowprint(color_text("\n- You can't go there directly from here.", "red"), 0.03)
         continue
-    while choice in ['y', 'n']:
-        if choice == 'y':
-            tip_num = tip(fare)
-            total = fare + tip_num
-            slowprint(f"\nYour new total is: ${total:.2f}\n", 0.03)
-            break
-        else:
-            if choice == 'n':
-                slowprint("\nNo tip added.\n", 0.03)
-                break
-            
+
+    minutes = world.travel_time_minutes(user.location, loc)
+
+    # Convert time to distance-based fare (example: 0.5$ per minute)
+    km_equivalent = minutes
+    fare = fare_calc(km_equivalent)
+
+    slowprint("Calculating cost\n", 0.03)
     loading_bar(dur, step)
-    receipt(fare, tip_num if choice == 'y' else 0, total if choice == 'y' else fare)
-    break
+
+    slowprint(color_text(f"\nTravel time: {minutes} minutes", "cyan"), 0.03)
+    slowprint(color_text(f"Your total is: ${fare:.2f}", "green"), 0.03)
+
+    tip_accept = input("\nWould you like to add a tip? (y/n)\n > ").strip().lower()
+    if tip_accept in ["y", "yes"]:
+        tip_amount = tip(fare)
+    
+    elif tip_accept in ["n", "no"]:
+        tip_amount = 0.0
+        slowprint("\nNo tip added.", 0.03)
+    else:
+        tip_amount = 0.0
+        slowprint("\nInvalid input, no tip added.", 0.03)
+
+    total_cost = fare + tip_amount
+
+    receipt_print = input("\nWould you like a receipt? (y/n)\n > ").strip().lower()
+    if receipt_print in ["y", "yes"]:
+        receipt(fare, tip_amount, total_cost)
+
+    elif receipt_print in ["n", "no"]:
+        slowprint("\nNo receipt printed.", 0.03)
+
+    else:
+        slowprint("\nInvalid input, no receipt printed.", 0.03)
+        
+    # Update player location
+    user.location = loc

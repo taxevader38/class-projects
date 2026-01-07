@@ -1,135 +1,173 @@
-# =============== Imports ===============
-from core.text import slowprint
+# =============== Helpers ===============
+def normalize(name: str) -> str:
+    return name.strip().lower()
 
-class locations:
+# =============== Map Class ===============
+class Locations:
     def __init__(self):
-        self.location_list = {
-            "mountain pass": {
-                "connected_to": ["hill town", "farmland"],
-                "distance_km": []
-            },
+        self.map = {
 
-            "hill town": {
-                "connected_to": ["mountain pass", "lake town", "farmland"],
-                "distance_km": []
-            },
+            # ======= NORTH =======
+            "mountain pass": {"connections": {
+                "hill town": {"distance": 26, "speed": 45, "traffic": 1.0},
+                "farmland": {"distance": 32, "speed": 40, "traffic": 1.0},
+            }},
 
-            "lake town": {
-                "connected_to": ["hill town", "riverside"],
-                "distance_km": []
-            },
+            "hill town": {"connections": {
+                "mountain pass": {"distance": 26, "speed": 45, "traffic": 1.0},
+                "lake town": {"distance": 18, "speed": 55, "traffic": 1.0},
+                "farmland": {"distance": 20, "speed": 45, "traffic": 1.0},
+            }},
 
-            "farmland": {
-                "connected_to": ["hill town", "riverside", "valley town"],
-                "distance_km": []
-            },
+            "lake town": {"connections": {
+                "hill town": {"distance": 18, "speed": 55, "traffic": 1.0},
+                "riverside": {"distance": 23, "speed": 60, "traffic": 1.0},
+            }},
 
-            "riverside": {
-                "connected_to": ["lake town", "central city", "dam", "farmland"],
-                "distance_km": []
-            },
+            # ======= MIDLANDS =======
+            "farmland": {"connections": {
+                "hill town": {"distance": 20, "speed": 45, "traffic": 1.0},
+                "riverside": {"distance": 13, "speed": 50, "traffic": 1.0},
+                "valley town": {"distance": 15, "speed": 50, "traffic": 1.0},
+                "mountain pass": {"distance": 32, "speed": 40, "traffic": 1.0},
+            }},
 
-            "dam": {
-                "connected_to": ["riverside", "industrial park"],
-                "distance_km": []
-            },
+            "riverside": {"connections": {
+                "lake town": {"distance": 23, "speed": 60, "traffic": 1.0},
+                "central city": {"distance": 16, "speed": 70, "traffic": 1.1},
+                "dam": {"distance": 10, "speed": 45, "traffic": 1.1},
+                "farmland": {"distance": 13, "speed": 50, "traffic": 1.0},
+            }},
 
-            "valley town": {
-                "connected_to": ["farmland", "central city", "old woods"],
-                "distance_km": []
-            },
+            "dam": {"connections": {
+                "riverside": {"distance": 10, "speed": 45, "traffic": 1.1},
+                "industrial park": {"distance": 14, "speed": 50, "traffic": 1.2},
+            }},
 
-            "central city": {
-                "connected_to": ["valley town", "industrial park"],
-                "distance_km": []
-            },
+            "valley town": {"connections": {
+                "farmland": {"distance": 15, "speed": 50, "traffic": 1.0},
+                "central city": {"distance": 21, "speed": 60, "traffic": 1.0},
+                "old woods": {"distance": 11, "speed": 40, "traffic": 1.0},
+            }},
 
-            "industrial park":{
-                "connected_to": ["central city", "dam", "rail cargo"],
-                "distance_km": []
-            },
+            "old woods": {"connections": {
+                "valley town": {"distance": 11, "speed": 40, "traffic": 1.0},
+                "quarry town": {"distance": 17, "speed": 45, "traffic": 1.0},
+            }},
 
-            "old woods": {
-                "connected_to": ["valley town", "quarry town"],
-                "distance_km": []
-            },
+            # ======= CORE CITY =======
+            "central city": {"connections": {
+                "riverside": {"distance": 16, "speed": 70, "traffic": 1.1},
+                "valley town": {"distance": 21, "speed": 60, "traffic": 1.0},
+                "industrial park": {"distance": 11, "speed": 50, "traffic": 1.3},
+                "suburbs": {"distance": 8, "speed": 40, "traffic": 1.5},
+                "university": {"distance": 5, "speed": 35, "traffic": 1.6},
+            }},
 
-            "university": {
-                "connected_to": ["suburbs", "central city"],
-                "distance_km": []
-            },
+            "industrial park": {"connections": {
+                "central city": {"distance": 11, "speed": 50, "traffic": 1.3},
+                "dam": {"distance": 14, "speed": 50, "traffic": 1.2},
+                "rail cargo": {"distance": 7, "speed": 45, "traffic": 1.2},
+            }},
 
-            "rail cargo": {
-                "connected_to": ["airport", "industrial park"],
-                "distance_km": []
-            },
+            "rail cargo": {"connections": {
+                "industrial park": {"distance": 7, "speed": 45, "traffic": 1.2},
+                "airport": {"distance": 8, "speed": 60, "traffic": 1.1},
+            }},
 
-            "quarry town": {
-                "connected_to": ["old woods", "suburbs", "harbor town"],
-                "distance_km": []
-            },
+            "airport": {"connections": {
+                "rail cargo": {"distance": 8, "speed": 60, "traffic": 1.1},
+                "suburbs": {"distance": 19, "speed": 80, "traffic": 1.2},
+            }},
 
-            "suburbs": {
-                "connected_to": ["quarry town", "university", "haor town", "downtown"],
-                "distance_km": []
-            },
+            "university": {"connections": {
+                "central city": {"distance": 5, "speed": 35, "traffic": 1.6},
+                "suburbs": {"distance": 4, "speed": 30, "traffic": 1.5},
+            }},
 
-            "airport": {
-                "connected_to": ["rail cargo", "suburbs"],
-                "distance_km": []
-            },
+            "suburbs": {"connections": {
+                "central city": {"distance": 8, "speed": 40, "traffic": 1.5},
+                "university": {"distance": 4, "speed": 30, "traffic": 1.5},
+                "airport": {"distance": 19, "speed": 80, "traffic": 1.2},
+                "quarry town": {"distance": 18, "speed": 55, "traffic": 1.1},
+                "harbor town": {"distance": 14, "speed": 45, "traffic": 1.4},
+                "downtown": {"distance": 6, "speed": 30, "traffic": 1.7},
+            }},
 
-            "harbor town": {
-                "connected_to": ["quarry town", "suburbs", "lighthouse", "downtown"],
-                "distance_km": []
-            },
+            "quarry town": {"connections": {
+                "old woods": {"distance": 17, "speed": 45, "traffic": 1.0},
+                "suburbs": {"distance": 18, "speed": 55, "traffic": 1.1},
+                "harbor town": {"distance": 23, "speed": 55, "traffic": 1.0},
+            }},
 
-            "downtown": {
-                "connected_to": ["suburbs", "stadium", "port docks"],
-                "distance_km": []
-            },
+            # ======= COAST =======
+            "harbor town": {"connections": {
+                "quarry town": {"distance": 23, "speed": 55, "traffic": 1.0},
+                "suburbs": {"distance": 14, "speed": 45, "traffic": 1.4},
+                "lighthouse": {"distance": 10, "speed": 40, "traffic": 1.0},
+                "downtown": {"distance": 7, "speed": 30, "traffic": 1.8},
+                "port docks": {"distance": 8, "speed": 30, "traffic": 1.9},
+            }},
 
-            "stadium": {
-                "connected_to": ["downtown"],
-                "distance_km": []
-            },
+            "downtown": {"connections": {
+                "suburbs": {"distance": 6, "speed": 30, "traffic": 1.7},
+                "harbor town": {"distance": 7, "speed": 30, "traffic": 1.8},
+                "stadium": {"distance": 2, "speed": 25, "traffic": 2.0},
+                "port docks": {"distance": 5, "speed": 30, "traffic": 1.9},
+            }},
 
-            "lighthouse": {
-                "connected_to": ["harbor town", "coast road", "port docks"],
-                "distance_km": []
-            },
+            "stadium": {"connections": {
+                "downtown": {"distance": 2, "speed": 25, "traffic": 2.0},
+            }},
 
-            "port docks": {
-                "connected_to": ["lighthouse", "shipyards", "downtown", "beach city"],
-                "distance_km": []
-            },
+            "lighthouse": {"connections": {
+                "harbor town": {"distance": 10, "speed": 40, "traffic": 1.0},
+                "port docks": {"distance": 6, "speed": 35, "traffic": 1.2},
+                "coast road": {"distance": 8, "speed": 50, "traffic": 1.0},
+            }},
 
-            "shipyards": {
-                "connected_to": ["port docks"],
-                "distance_km": []
-            },
+            "port docks": {"connections": {
+                "downtown": {"distance": 5, "speed": 30, "traffic": 1.9},
+                "harbor town": {"distance": 8, "speed": 30, "traffic": 1.9},
+                "shipyards": {"distance": 3, "speed": 25, "traffic": 1.3},
+                "beach city": {"distance": 12, "speed": 50, "traffic": 1.1},
+                "lighthouse": {"distance": 6, "speed": 35, "traffic": 1.2},
+            }},
 
-            "coast road": {
-                "connected_to": ["lighthouse", "beach city", "fishing village"],
-                "distance_km": []
-            },
+            "shipyards": {"connections": {
+                "port docks": {"distance": 3, "speed": 25, "traffic": 1.3},
+            }},
 
-            "beach city": {
-                "connected_to": ["coast road", "port docks"],
-                "distance_km": []
-            },
+            "coast road": {"connections": {
+                "lighthouse": {"distance": 8, "speed": 50, "traffic": 1.0},
+                "beach city": {"distance": 12, "speed": 60, "traffic": 1.0},
+                "fishing village": {"distance": 15, "speed": 45, "traffic": 1.0},
+            }},
 
-            "coast road": {
-                "connected_to": ["lighthouse", "beach city", "fishing village"],
-                "distance_km": []
-            },
-            
-            "fishing village": {
-                "connected_to": ["coast road"],
-                "distance_km": []
-            }
+            "beach city": {"connections": {
+                "coast road": {"distance": 12, "speed": 60, "traffic": 1.0},
+                "port docks": {"distance": 12, "speed": 50, "traffic": 1.1},
+            }},
+
+            "fishing village": {"connections": {
+                "coast road": {"distance": 15, "speed": 45, "traffic": 1.0},
+            }},
         }
-        
+
+    # ================== Travel ==================
+    def travel_time_minutes(self, from_loc, to_loc):
+        from_loc = normalize(from_loc)
+        to_loc = normalize(to_loc)
+
+        if from_loc not in self.map:
+            raise ValueError(f"Unknown location: {from_loc}")
+        if to_loc not in self.map[from_loc]["connections"]:
+            raise ValueError(f"No road from {from_loc} to {to_loc}")
+
+        road = self.map[from_loc]["connections"][to_loc]
+        hours = (road["distance"] / road["speed"]) * road["traffic"]
+        return round(hours * 60, 1)
+      
 # =============== Function Definitions ===============
 # Normalize a name by stripping whitespace and converting to lowercase
 def normalize(name: str) -> str:
@@ -144,11 +182,12 @@ def is_valid_location(name: str, locations: list) -> bool:
     normalized_locations = [normalize(loc) for loc in locations]
     return normalized_name in normalized_locations
 
+
 def print_map():
     """
     Print a simple text-based map of locations
     """
-    slowprint("Map of Locations:", 0.03)
+    print("Map of Locations:")
     print("                            [MT] Mountain Pass")
     print("                                 |")
     print("                                 |")
@@ -176,6 +215,6 @@ def print_map():
     print("                              [CB] Coast Road -------- [BC] Beach City")
     print("                                   |")
     print("                                   |")
-    print("                              [FV] Fishing Village")
+    print("                              [FV] Fishing Village\n")
 
 
