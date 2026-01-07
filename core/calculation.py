@@ -59,3 +59,19 @@ def tip(cost) -> float:
         tip_amount = cost * percent[per]
         slowprint(f"\n${tip_amount:.2f} added as tip.", 0.03)
     return tip_amount
+
+def receipt(fare, tip_amount=0, total=0):
+    """
+    Print a receipt with the fare, tip, and total cost for the ride
+    """
+
+    #Get the total amount of money from the ride
+    total = fare + tip_amount
+    print("\n----- Receipt -----")
+
+    #Print the fare, tip (if applicable), and total cost of the ride
+    print(f"Fare: ${fare:.2f}")
+    if tip_amount > 0:
+        print(f"Tip: ${tip_amount:.2f}")
+    print(f"Total: ${total:.2f}")
+    print("-------------------")

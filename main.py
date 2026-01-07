@@ -14,12 +14,12 @@ Extra: : Loading bar, tip option with different amounts,
 """
 
 # =============== Imports ===============
-#import core.rideshare_calc_system as rideshare_calc_system
-import map.map as map
+import core.rideshare_calc_system as rideshare_calc_system
+
 #Run the main program
 def main():
-    #rideshare_calc_system.main()
-    map.print_map()
+    rideshare_calc_system.main()
+
 #Ensure the main program only runs when this file is executed directly
 if __name__ == "__main__":
     main()
