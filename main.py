@@ -36,7 +36,7 @@ def main_fare():
     rideshare_calc_system.main()
 
 def main_binary_calc():
-    pass
+    binary_calc_system.main()
 
 #Ensure the main program only runs when this file is executed directly
 if __name__ == "__main__":
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     print("2. Binary Calculator\n")
 
     try:
-        decision = input("Choose a program to run\n > ")
+        decision = input("Choose a program to run (1/2)\n > ")
     except (KeyboardInterrupt, EOFError):
         slowprint(color_text("\nWrong input type, try again", "red"), 0.03)
 
@@ -58,5 +58,6 @@ if __name__ == "__main__":
             
         if decision == "2":
             loading_bar(dur, step)
+            import binary_calc_program.core as binary_calc_system
             main_binary_calc()
             

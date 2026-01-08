@@ -12,9 +12,6 @@ from sfx.sfx import loading_bar
 #Flag for while loop
 active_drive = False
 
-# =============== Function Definitions ===============
-
-
 # =============== Main Program ===============
 #Random duration and step count for variability with the loading bar
 dur = random.randint(1, 5)
@@ -55,7 +52,7 @@ while active_drive:
         slowprint(f" - {place.title()} ({minutes} min)", 0.01)
 
     try:
-        loc = input("\nWhere do you want to go?\n > ").lower().strip()
+        loc = input("\nWhere do you want to go? (Type 'q' to quit)\n > ").lower().strip()
     except (KeyboardInterrupt, EOFError):
         slowprint(color_text("\n- Use an actual location", "red"), 0.03)
         continue
@@ -63,6 +60,10 @@ while active_drive:
     if loc not in connections:
         slowprint(color_text("\n- You can't go there directly from here.", "red"), 0.03)
         continue
+
+    if loc == "q":
+        slowprint("\nThanks for driving with us, have a great day!", 0.03)
+        break
 
     minutes = world.travel_time_minutes(user.location, loc)
 
