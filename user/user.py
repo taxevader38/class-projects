@@ -2,10 +2,8 @@ from map.map import Locations
 import random
 
 class User:
-    def __init__(self, name: str, balance: float = 0.0, location: str = None):
+    def __init__(self, name: str, location: str = None):
         self.name = name
-        self.balance = balance
-
         self.world = Locations()
 
         if location is None:

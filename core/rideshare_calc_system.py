@@ -84,7 +84,7 @@ while active_drive:
     km_equivalent = minutes
     fare = fare_calc(km_equivalent)
 
-    slowprint("Calculating cost\n", 0.03)
+    slowprint("\nCalculating cost\n", 0.03)
     loading_bar(dur, step)
 
     slowprint(color_text(f"\nTravel time: {minutes} minutes", "cyan"), 0.03)
