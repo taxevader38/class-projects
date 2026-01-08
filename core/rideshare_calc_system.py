@@ -43,7 +43,7 @@ except (KeyboardInterrupt, EOFError):
     sys.exit()
 
 try:
-    set_drive = input("Do you want to go for a drive? (y/n)\n > ")
+    set_drive = input("\nDo you want to go for a drive? (y/n)\n > ")
 except (KeyboardInterrupt, EOFError):
     slowprint("\nNot sure thats something you can say or do, rude", 0.03)
     
@@ -112,6 +112,6 @@ while active_drive:
 
     else:
         slowprint("\nInvalid input, no receipt printed.", 0.03)
-        
+
     # Update player location
     user.location = loc

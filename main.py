@@ -11,6 +11,14 @@ Description: A program used to calculate the cost of a ride fare in the
 Extra: : Loading bar, tip option with different amounts, 
         receipt, try-except catching, input handling constrainting,
         and text effects
+
+Citations:
+
+Random Dictionary Pair Selection:
+Title: How can I get a random key-value pair from a dictionary?
+Author: tekknolagi
+Date: Jan, 7 2026
+Availability: https://stackoverflow.com/questions/4859292/how-can-i-get-a-random-key-value-pair-from-a-dictionary
 """
 
 # =============== Imports ===============

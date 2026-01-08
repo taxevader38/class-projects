@@ -187,7 +187,7 @@ def print_map():
     """
     Print a simple text-based map of locations
     """
-    print("Map of Locations:")
+    print("\nMap of Locations:")
     print("                            [MT] Mountain Pass")
     print("                                 |")
     print("                                 |")

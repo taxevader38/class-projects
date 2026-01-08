@@ -74,4 +74,4 @@ def receipt(fare, tip_amount=0, total=0):
     if tip_amount > 0:
         print(f"Tip: ${tip_amount:.2f}")
     print(f"Total: ${total:.2f}")
-    print("-------------------")
+    print("-------------------\n")
