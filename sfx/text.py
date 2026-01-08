@@ -4,6 +4,9 @@ import time
 def pause(sec=0.6):
     time.sleep(sec)
 
+def sep():
+    print("\n" + "-" * 60 + "\n")
+
 def slowprint(text, delay=0.01):
     for ch in text:
         print(ch, end="", flush=True)

@@ -1,4 +1,4 @@
-from map.map import Locations
+from fare_program.map.map import Locations
 import random
 
 class User:

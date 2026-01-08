@@ -1,5 +1,5 @@
 # =============== Imports ===============
-from core.text import slowprint, color_text
+from sfx.text import slowprint, color_text
 
 #Base cost added immediately
 base_fare = 4

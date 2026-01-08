@@ -1,40 +1,26 @@
 # =============== Imports ===============
 import sys
 import random
-import time
-from core.text import slowprint, color_text 
-from core.calculation import fare_calc, tip, receipt
-from map.map import Locations, print_map
-from user.user import User
+
+from sfx.text import slowprint, color_text, sep
+from fare_program.core.calculation import fare_calc, tip, receipt
+from fare_program.map.map import Locations, print_map
+from fare_program.user.user import User
+from sfx.sfx import loading_bar
 
 # =============== Global Variables ===============
 #Flag for while loop
 active_drive = False
 
 # =============== Function Definitions ===============
-def loading_bar(duration, steps):
-    """
-    Print a loading bar that goes progressively from 0 to 100% to simulate loading
-    """
-    #Simulate animation with steps
-    for i in range(steps + 1):
-        
-        
-        perc_loaded = 100.0 * i / steps
-        
-        #Define the loading bar 
-        bar = '■' * int(perc_loaded / 2) + '-' * int(50 - perc_loaded / 2)
-        
-        #Use sys to print the loading bar on one line
-        sys.stdout.write('\r[%s] %.2f%%' % (bar, perc_loaded))
-        sys.stdout.flush()
-        time.sleep(duration / steps)
-    sys.stdout.write("\n")
+
 
 # =============== Main Program ===============
 #Random duration and step count for variability with the loading bar
 dur = random.randint(1, 5)
 step = random.randint(10, 50)
+
+sep()
 
 try:
     user = User(input("Enter your name:\n > "))
