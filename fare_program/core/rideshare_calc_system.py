@@ -57,6 +57,9 @@ while active_drive:
         slowprint(color_text("\n- Use an actual location", "red"), 0.03)
         continue
 
+    # Expand abbreviations if provided
+    loc = world.abbreviations.get(loc, loc)
+
     if loc not in connections:
         slowprint(color_text("\n- You can't go there directly from here.", "red"), 0.03)
         continue

@@ -154,6 +154,33 @@ class Locations:
             }},
         }
 
+        self.abbreviations = {
+            "MT": "mountain pass",
+            "HL": "hill town",
+            "LK": "lake town",
+            "FM": "farmland",
+            "RV": "riverside",
+            "DM": "dam",
+            "VT": "valley town",
+            "OW": "old woods",
+            "CT": "central city",
+            "IP": "industrial park",
+            "RC": "rail cargo",
+            "AP": "airport",
+            "UN": "university",
+            "SB": "suburbs",
+            "QT": "quarry town",
+            "HT": "harbor town",
+            "DT": "downtown",
+            "ST": "stadium",
+            "LF": "lighthouse",
+            "PD": "port docks",
+            "SY": "shipyards",
+            "CB": "coast road",
+            "BC": "beach city",
+            "FV": "fishing village",
+        }
+
     # ================== Travel ==================
     def travel_time_minutes(self, from_loc, to_loc):
         from_loc = normalize(from_loc)
