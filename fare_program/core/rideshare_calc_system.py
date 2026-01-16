@@ -12,6 +12,37 @@ from sfx.sfx import loading_bar
 #Flag for while loop
 active_drive = False
 
+# Abbreviations for locations
+abbreviations = {
+    "mt": "mountain pass",
+    "hl": "hill town",
+    "lk": "lake town",
+    "fm": "farmland",
+    "rv": "riverside",
+    "dm": "dam",
+    "vt": "valley town",
+    "ct": "central city",
+    "ip": "industrial park",
+    "un": "university",
+    "rc": "rail cargo",
+    "ap": "airport",
+    "ow": "old woods",
+    "qt": "quarry town",
+    "sb": "suburbs",
+    "ht": "harbor town",
+    "dt": "downtown",
+    "st": "stadium",
+    "lf": "lighthouse",
+    "pd": "port docks",
+    "wy": "shipyards",
+    "cb": "coast road",
+    "bc": "beach city",
+    "fv": "fishing village"
+}
+
+# Reverse mapping for display
+full_to_abbrev = {v: k.upper() for k, v in abbreviations.items()}
+
 # =============== Main Program ===============
 #Random duration and step count for variability with the loading bar
 dur = random.randint(1, 5)
@@ -49,7 +80,11 @@ while active_drive:
     slowprint("\nYou can travel to:", 0.03)
     for place in connections:
         minutes = world.travel_time_minutes(user.location, place)
-        slowprint(f" - {place.title()} ({minutes} min)", 0.01)
+        abbrev = full_to_abbrev.get(place, "")
+        if abbrev:
+            slowprint(f" - {place.title()} [{abbrev}] ({minutes} min)", 0.01)
+        else:
+            slowprint(f" - {place.title()} ({minutes} min)", 0.01)
 
     try:
         loc = input("\nWhere do you want to go? (Type 'q' to quit)\n > ").lower().strip()
@@ -57,8 +92,9 @@ while active_drive:
         slowprint(color_text("\n- Use an actual location", "red"), 0.03)
         continue
 
-    # Expand abbreviations if provided
-    loc = world.abbreviations.get(loc, loc)
+    # Convert abbreviation to full name if applicable
+    if loc in abbreviations:
+        loc = abbreviations[loc]
 
     if loc not in connections:
         slowprint(color_text("\n- You can't go there directly from here.", "red"), 0.03)
