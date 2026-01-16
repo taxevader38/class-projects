@@ -70,8 +70,8 @@ def receipt(fare, tip_amount=0, total=0):
     print("\n----- Receipt -----")
 
     #Print the fare, tip (if applicable), and total cost of the ride
-    print(f"Fare: ${fare:.2f}")
+    slowprint(f"Fare: ${fare:.2f}", 0.03)
     if tip_amount > 0:
-        print(f"Tip: ${tip_amount:.2f}")
-    print(f"Total: ${total:.2f}")
+        slowprint(f"Tip: ${tip_amount:.2f}", 0.03)
+    slowprint(f"Total: ${total:.2f}", 0.03)
     print("-------------------\n")

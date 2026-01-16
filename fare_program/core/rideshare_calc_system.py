@@ -1,6 +1,7 @@
 # =============== Imports ===============
 import sys
 import random
+import time
 
 from sfx.text import slowprint, color_text, sep
 from fare_program.core.calculation import fare_calc, tip, receipt
@@ -132,10 +133,10 @@ while active_drive:
     receipt_print = input("\nWould you like a receipt? (y/n)\n > ").strip().lower()
     if receipt_print in ["y", "yes"]:
         receipt(fare, tip_amount, total_cost)
-
+        time.sleep(2)
     elif receipt_print in ["n", "no"]:
         slowprint("\nNo receipt printed.", 0.03)
-
+        time.sleep(2)
     else:
         slowprint("\nInvalid input, no receipt printed.", 0.03)
 
